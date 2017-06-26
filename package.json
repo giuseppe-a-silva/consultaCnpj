@@ -1,0 +1,46 @@
+{
+  "name": "consultaCnpj",
+  "version": "1.0.0",
+  "description": "Módulo de consulta ao CNPJ na base da Receita Federal.",
+  "main": "./index.js",
+  "scripts": {
+    "coverage": "nyc npm test && nyc report",
+    "lint": "eslint lib/*.js",
+    "start": "node index.js",
+    "test": "mocha \"tests/*.test.js\"",
+    "watch": "nodemon --exec \"npm start\""
+  },
+  "author": "Antonelli Santos",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "iconv-lite": "^0.4.17",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-string": "^1.3.0",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-react": "^7.0.1",
+    "fs": "0.0.1-security",
+    "kcors": "^2.2.1",
+    "koa": "^2.2.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-logger": "^3.0.0",
+    "koa-router": "^7.2.0",
+    "mocha": "^3.2.0",
+    "nyc": "^11.0.2"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antonellisantos/consultaCnpj.git"
+  }
+}
