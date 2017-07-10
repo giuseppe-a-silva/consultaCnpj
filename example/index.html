@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Testando API do ConsultaCNPJ</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      $.get('http://localhost:8888/captcha', data => {
+        $("#imgCaptcha").attr("src", "data:image/png;base64,"+data.captcha);
+        $("#sessionId").val(data.sessionId);
+      });
+      $("#consultaCnpj").submit(e => {
+        e.preventDefault();
+
+        const SESSION_ID = $("#sessionId").val();
+        const CNPJ = $("#cnpj").val();
+        const SOLVED_CAPTCHA = $("#solvedCaptcha").val();
+
+        $.post('http://localhost:8888/infos', {
+          sessionId: SESSION_ID,
+          cnpj: CNPJ,
+          solvedCaptcha: SOLVED_CAPTCHA,
+        }, data => {
+          for(let info in data) {
+            $("#result").append(`<tr> <td> ${info} </td> <td> ${data[info]} </td> </tr>`);
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <table border="0" cellspacing="0" cellpadding="0" width="100%">
+    <tr>
+      <td>
+        <font color="#000080" face="Arial">
+          <b>Emissão de Comprovante de Inscrição e de Situação Cadastral</b>
+        </font>
+      </td>
+    </tr>
+  </table>
+
+  <p><font face="Arial" size="2">
+    <b>Contribuinte,</b></p>
+
+    <p align="left"><font size="2" face="arial">
+      Digite o número de CNPJ da empresa e clique em &quot;Consultar&quot;.
+    </font>
+  </p>
+
+  <form id="consultaCnpj" action="" method="post" name="consultaCnpj">
+    <input type="hidden" id="sessionId">
+    <table border="0" cellspacing="1">
+      <tr>
+        <td valign="top">
+          <font face="Arial" size="2">
+            <b>CNPJ :</b>
+            <input tabIndex="1" name="cnpj" id="cnpj" maxlength="14" size="16" value="" />
+          </font>
+        </td>
+        <td>
+          <font face="Arial" size="2">
+            <div style="border: 1px solid black; width: 220px; padding: 4px; float: left;">
+              <div style="width: 100%;">
+                <div style="float: left;">
+                  <img id="imgCaptcha">
+                </div>
+              </div>
+              <div style="width: 100%; float: left;">
+                <label id="labelcaptcha">Digite os caracteres acima:</label>
+                <input type="text" id="solvedCaptcha" name="solvedCaptcha" maxlength="6" size="16"/>
+              </div>
+            </div>
+          </font>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" colspan="2">
+          <p><br>
+            <input type="submit" value="Consultar" id=submit name=submit>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </form>
+  <table id="result"></table>
+</body>
+</html>

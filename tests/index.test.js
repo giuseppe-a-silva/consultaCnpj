@@ -14,7 +14,7 @@ const validCnpj = '21.876.883/0001-78';
 
 chai.use(chaiString);
 
-let expect = chai.expect;
+const expect = chai.expect;
 
 describe('ConsultaCNPJ API', () => {
 

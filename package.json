@@ -8,7 +8,8 @@
     "lint": "eslint lib/*.js",
     "start": "node index.js",
     "test": "mocha \"tests/*.test.js\"",
-    "watch": "nodemon --exec \"npm start\""
+    "watch": "nodemon --exec \"npm start\"",
+    "example": "node example/server.js"
   },
   "author": "Antonelli Santos",
   "license": "MIT",
@@ -32,7 +33,9 @@
     "koa-bodyparser": "^4.2.0",
     "koa-logger": "^3.0.0",
     "koa-router": "^7.2.0",
+    "koa-send": "^4.1.0",
     "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
     "nyc": "^11.0.2"
   },
   "directories": {
