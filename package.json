@@ -1,5 +1,5 @@
 {
-  "name": "consultaCnpj",
+  "name": "consulta-cnpj",
   "version": "1.0.0",
   "description": "Módulo de consulta ao CNPJ na base da Receita Federal.",
   "main": "./index.js",
