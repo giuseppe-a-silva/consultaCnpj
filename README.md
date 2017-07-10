@@ -19,6 +19,7 @@ Módulo para consulta do CNPJ na base da Receita Federal do Brasil.
 * **Carlos Carvalho** - [Carlos Carvalho](https://github.com/josecarlosweb)
 
 ## Instalação
+
     $ npm i --save consultaCnpj
 
 ## Como Usar
@@ -27,28 +28,32 @@ Módulo para consulta do CNPJ na base da Receita Federal do Brasil.
 
 Utilitário para retirar os caractéres não-numéricos.
 
-    const cnpj = consultaCnpj.unmask('12.123.123/1234-12'); // 12123123123412
-    const cep = consultaCnpj.unmask('12.123-123'); // 12123123
-    const cpf = consultaCnpj.unmask('123.123.123-12'); // 12312312312
+```js
+const cnpj = consultaCnpj.unmask('12.123.123/1234-12'); // 12123123123412
+const cep = consultaCnpj.unmask('12.123-123'); // 12123123
+const cpf = consultaCnpj.unmask('123.123.123-12'); // 12312312312
+```
 
 ### Utilitário: Validate
 
 Utilitário para validar o CNPJ.
 
-    const result = consultaCnpj.validate('21.876.883/0001-78'); // true
-    const result = consultaCnpj.validate('21876883000178'); // true
-    const result = consultaCnpj.validate('00.000.000/0000-00'); // false
-    const result = consultaCnpj.validate('00000000000000'); // false
+```js
+const result = consultaCnpj.validate('21.876.883/0001-78'); // true
+const result = consultaCnpj.validate('21876883000178'); // true
+const result = consultaCnpj.validate('00.000.000/0000-00'); // false
+const result = consultaCnpj.validate('00000000000000'); // false
+```
 
 ### Consultar o CNPJ
 
-    const params = consultaCnpj.getParams(); // Objeto com o sessionId e captcha (em base64) ou erro.
-    const data = consultaCnpj.getBasicInfos('21.876.883/0001-78', sessionId, 'solvedCaptcha'); // Objeto com as informações do CNPJ ou erro.
-    const moreData = consultaCnpj.getAdvancedInfos(sessionId); // Objeto com as informações de QSA e Capital social ou erro.
+```js
+const params = consultaCnpj.getParams(); // Objeto com o sessionId e captcha (em base64) ou erro.
+const data = consultaCnpj.getBasicInfos('21.876.883/0001-78', sessionId, 'solvedCaptcha'); // Objeto com as informações do CNPJ ou erro.
+const moreData = consultaCnpj.getAdvancedInfos(sessionId); // Objeto com as informações de QSA e Capital social ou erro.
+```
 
-### Exemplo
-
-* **Básico** - [Exemplo Básico](https://github.com/antonellisantos/consultaCnpj/tree/master/example)
+### [Exemplo](https://github.com/antonellisantos/consultaCnpj/tree/master/example)
 
     $ npm run example
 
