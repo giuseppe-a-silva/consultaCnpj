@@ -17,14 +17,22 @@
         const CNPJ = $("#cnpj").val();
         const SOLVED_CAPTCHA = $("#solvedCaptcha").val();
 
-        $.post('http://localhost:8888/infos', {
+        $.post('http://localhost:8888/basicInfos', {
           sessionId: SESSION_ID,
           cnpj: CNPJ,
           solvedCaptcha: SOLVED_CAPTCHA,
-        }, data => {
+        }).done(data => {
           for(let info in data) {
             $("#result").append(`<tr> <td> ${info} </td> <td> ${data[info]} </td> </tr>`);
           }
+
+          $.post('http://localhost:8888/advancedInfos', {
+            sessionId: SESSION_ID
+          }).done(d => {
+            for(let i in d) {
+              $("#result").append(`<tr> <td> ${i} </td> <td> ${d[i]} </td> </tr>`);
+            }
+          });
         });
       });
     });

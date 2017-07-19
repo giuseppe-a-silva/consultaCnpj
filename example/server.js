@@ -15,7 +15,7 @@ app.use(bodyParser());
 
 router.get('/captcha', async (ctx, next) => {
   try {
-    ctx.body = await consultaCnpj.getCaptcha();
+    ctx.body = await consultaCnpj.getParams();
   } catch(e) {
     ctx.body = {
       error: e.message,
@@ -25,10 +25,23 @@ router.get('/captcha', async (ctx, next) => {
   }
 });
 
-router.post('/infos', async (ctx, next) => {
+router.post('/basicInfos', async (ctx, next) => {
   const [cnpj, sessionId, solvedCaptcha] = [ctx.request.body.cnpj, ctx.request.body.sessionId, ctx.request.body.solvedCaptcha];
   try {
     ctx.body = await consultaCnpj.getBasicInfos(cnpj, sessionId, solvedCaptcha);
+  } catch(e) {
+    ctx.body = {
+      error: e.message,
+    };
+    ctx.status = 400;
+    console.log(e);
+  }
+});
+
+router.post('/advancedInfos', async (ctx, next) => {
+  const sessionId = ctx.request.body.sessionId;
+  try {
+    ctx.body = await consultaCnpj.getAdvancedInfos(sessionId);
   } catch(e) {
     ctx.body = {
       error: e.message,
