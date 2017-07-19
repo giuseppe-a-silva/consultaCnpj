@@ -1,6 +1,5 @@
 node_modules/*
 coverage/*
 .nyc_output/*
-.eslintrc
 *.sublime-project
 *.sublime-workspace
