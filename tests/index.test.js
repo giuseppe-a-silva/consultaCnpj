@@ -4,13 +4,17 @@ const chai = require('chai');
 const chaiString = require('chai-string');
 
 const getParams = require('../lib/getParams');
-const buildPromise = require('../lib/buildPromise');
+const promiseHandler = require('../lib/promiseHandler');
 const validateRequest = require('../lib/validateRequest');
 const generateImageBase64 = require('../lib/generateImageBase64');
 const getBodyAndEncode = require('../lib/getBodyAndEncode');
 const consultaCnpj = require('../index');
 
 const validCnpj = '21.876.883/0001-78';
+const defaultError = {
+  message: 'Erro interno!',
+  code: 500,
+};
 
 chai.use(chaiString);
 
@@ -18,84 +22,83 @@ const expect = chai.expect;
 
 describe('ConsultaCNPJ API', () => {
 
-  describe('#buildPromise(new Error(\'Falha geral!\'))', () => {
+  describe('#promiseHandler(new Error(\'Falha geral!\'))', () => {
     it('should return an Error', () => {
       const message = 'Falha geral!';
-      return buildPromise(new Error(message))
-        .catch(error => {
+      return promiseHandler(new Error(message))
+        .catch((error) => {
           expect(error).to.exist.and.be.a.instanceof(Error);
           expect(error.message).to.be.equal(message);
+          expect(error.code).to.be.equal(defaultError.code);
         });
     });
   });
 
-  describe('#buildPromise({type: \'error\'})', () => {
+  describe('#promiseHandler({ type: \'error\' })', () => {
     it('should return an Error', () => {
-      return buildPromise({type: 'error'})
-        .catch(error => {
+      return promiseHandler({ type: 'error' })
+        .catch((error) => {
           expect(error).to.exist.and.be.a.instanceof(Error);
-          expect(error.message).to.be.equal('Erro interno!');
+          expect(error.message).to.be.equal(defaultError.message);
+          expect(error.code).to.be.equal(defaultError.code);
         });
     });
   });
 
-  describe('#buildPromise({type: \'Error\'})', () => {
+  describe('#promiseHandler({ type: \'Error\' })', () => {
     it('should return an Error', () => {
-      return buildPromise({type: 'Error'})
-        .catch(error => {
+      return promiseHandler({ type: 'Error' })
+        .catch((error) => {
           expect(error).to.exist.and.be.a.instanceof(Error);
-          expect(error.message).to.be.equal('Erro interno!');
+          expect(error.message).to.be.equal(defaultError.message);
+          expect(error.code).to.be.equal(defaultError.code);
         });
     });
   });
 
-  describe('#buildPromise({type: \'ERROR\'})', () => {
+  describe('#promiseHandler({ type: \'ERROR\' })', () => {
     it('should return an Error', () => {
-      return buildPromise({type: 'ERROR'})
-        .catch(error => {
+      return promiseHandler({ type: 'ERROR' })
+        .catch((error) => {
           expect(error).to.exist.and.be.a.instanceof(Error);
-          expect(error.message).to.be.equal('Erro interno!');
+          expect(error.message).to.be.equal(defaultError.message);
+          expect(error.code).to.be.equal(defaultError.code);
         });
     });
   });
 
-  describe('#buildPromise(null)', () => {
+  describe('#promiseHandler()', () => {
     it('should return an Error', () => {
-      return buildPromise({type: 'error'})
-        .catch(error => {
+      return promiseHandler()
+        .catch((error) => {
           expect(error).to.exist.and.be.a.instanceof(Error);
-          expect(error.message).to.be.equal('Erro interno!');
+          expect(error.message).to.be.equal(defaultError.message);
+          expect(error.code).to.be.equal(defaultError.code);
         });
     });
   });
 
-  describe('#buildPromise(undefined)', () => {
+  describe('#promiseHandler({}, 404)', () => {
     it('should return an Error', () => {
-      return buildPromise({type: 'error'})
-        .catch(error => {
+      const errorCode = 404;
+      return promiseHandler({}, errorCode)
+        .catch((error) => {
           expect(error).to.exist.and.be.a.instanceof(Error);
-          expect(error.message).to.be.equal('Erro interno!');
+          expect(error.message).to.be.equal(defaultError.message);
+          expect(error.code).to.be.equal(errorCode);
         });
     });
   });
 
-  describe('#buildPromise(\'\')', () => {
+  describe('#promiseHandler({}, 404, \'Não encontrado!\')', () => {
     it('should return an Error', () => {
-      return buildPromise({type: 'error'})
-        .catch(error => {
+      const errorCode = 404;
+      const errorMessage = 'Não encontrado!';
+      return promiseHandler({}, errorCode, errorMessage)
+        .catch((error) => {
           expect(error).to.exist.and.be.a.instanceof(Error);
-          expect(error.message).to.be.equal('Erro interno!');
-        });
-    });
-  });
-
-  describe('#buildPromise(null)', () => {
-    it('should return an Error', () => {
-      const data = 'Informação qualquer!';
-      return buildPromise(data)
-        .then(x => {
-          expect(x).to.exist.and.be.a('string');
-          expect(x).to.be.equal(data);
+          expect(error.message).to.be.equal(errorMessage);
+          expect(error.code).to.be.equal(errorCode);
         });
     });
   });
@@ -248,5 +251,6 @@ describe('ConsultaCNPJ API', () => {
         });
     });
   });
+
 
 });
