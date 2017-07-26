@@ -1,14 +1,16 @@
 'use strict';
 
 const consultaCnpj = require('../index');
-const koa = require('koa');
 const cors = require('kcors');
 const logger = require('koa-logger');
-const router = new require('koa-router')();
 const bodyParser = require('koa-bodyparser');
 const send = require('koa-send');
+const Koa = require('koa');
+const Router = require('koa-router');
 
-const app = new koa();
+const router = new Router();
+
+const app = new Koa();
 app.use(cors());
 app.use(logger());
 app.use(bodyParser());
@@ -18,9 +20,12 @@ router.get('/captcha', async (ctx, next) => {
     ctx.body = await consultaCnpj.getParams();
   } catch(e) {
     ctx.body = {
-      error: e.message,
+      error: {
+        message: e.message,
+        code: e.code,
+      }
     };
-    ctx.status = 400;
+    ctx.status = e.status;
     console.log(e);
   }
 });
@@ -31,9 +36,12 @@ router.post('/basicInfos', async (ctx, next) => {
     ctx.body = await consultaCnpj.getBasicInfos(cnpj, sessionId, solvedCaptcha);
   } catch(e) {
     ctx.body = {
-      error: e.message,
+      error: {
+        message: e.message,
+        code: e.code,
+      }
     };
-    ctx.status = 400;
+    ctx.status = e.status;
     console.log(e);
   }
 });
@@ -44,9 +52,12 @@ router.post('/advancedInfos', async (ctx, next) => {
     ctx.body = await consultaCnpj.getAdvancedInfos(sessionId);
   } catch(e) {
     ctx.body = {
-      error: e.message,
+      error: {
+        message: e.message,
+        code: e.code,
+      }
     };
-    ctx.status = 400;
+    ctx.status = e.status;
     console.log(e);
   }
 });

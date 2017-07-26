@@ -13,7 +13,8 @@ const consultaCnpj = require('../index');
 const validCnpj = '21.876.883/0001-78';
 const defaultError = {
   message: 'Erro interno!',
-  code: 500,
+  code: 101,
+  status: 500,
 };
 
 chai.use(chaiString);
@@ -27,8 +28,8 @@ describe('ConsultaCNPJ API', () => {
       const message = 'Falha geral!';
       return promiseHandler(new Error(message))
         .catch((error) => {
-          expect(error).to.exist.and.be.a.instanceof(Error);
           expect(error.message).to.be.equal(message);
+          expect(error).to.exist.and.be.a.instanceof(Error);
           expect(error.code).to.be.equal(defaultError.code);
         });
     });
@@ -71,16 +72,18 @@ describe('ConsultaCNPJ API', () => {
     it('should return an Error', () => {
       return promiseHandler()
         .catch((error) => {
+          console.log(error);
           expect(error).to.exist.and.be.a.instanceof(Error);
           expect(error.message).to.be.equal(defaultError.message);
           expect(error.code).to.be.equal(defaultError.code);
+          expect(error.status).to.be.equal(defaultError.status);
         });
     });
   });
 
   describe('#promiseHandler({}, 404)', () => {
     it('should return an Error', () => {
-      const errorCode = 404;
+      const errorCode = 200;
       return promiseHandler({}, errorCode)
         .catch((error) => {
           expect(error).to.exist.and.be.a.instanceof(Error);
@@ -90,9 +93,51 @@ describe('ConsultaCNPJ API', () => {
     });
   });
 
-  describe('#promiseHandler({}, 404, \'Não encontrado!\')', () => {
+  describe('#promiseHandler({}, 100, \'Não encontrado!\', 404)', () => {
     it('should return an Error', () => {
-      const errorCode = 404;
+      const statusCode = 404;
+      const errorCode = 100;
+      const errorMessage = 'Não encontrado!';
+      return promiseHandler({}, errorCode, errorMessage, statusCode)
+        .catch((error) => {
+          expect(error).to.exist.and.be.a.instanceof(Error);
+          expect(error.code).to.be.equal(errorCode);
+          expect(error.message).to.be.equal(errorMessage);
+          expect(error.status).to.be.equal(statusCode);
+        });
+    });
+  });
+
+  describe('#promiseHandler({}, null, \'Não encontrado!\', 404)', () => {
+    it('should return an Error', () => {
+      const statusCode = 404;
+      const errorMessage = 'Não encontrado!';
+      return promiseHandler({}, null, errorMessage, statusCode)
+        .catch((error) => {
+          expect(error).to.exist.and.be.a.instanceof(Error);
+          expect(error.code).to.be.equal(defaultError.code);
+          expect(error.message).to.be.equal(errorMessage);
+          expect(error.status).to.be.equal(statusCode);
+        });
+    });
+  });
+
+  describe('#promiseHandler({}, null, null, 404)', () => {
+    it('should return an Error', () => {
+      const statusCode = 404;
+      return promiseHandler({}, null, null, statusCode)
+        .catch((error) => {
+          expect(error).to.exist.and.be.a.instanceof(Error);
+          expect(error.code).to.be.equal(defaultError.code);
+          expect(error.message).to.be.equal(defaultError.message);
+          expect(error.status).to.be.equal(statusCode);
+        });
+    });
+  });
+
+  describe('#promiseHandler({}, 102, \'Não encontrado!\')', () => {
+    it('should return an Error', () => {
+      const errorCode = 102;
       const errorMessage = 'Não encontrado!';
       return promiseHandler({}, errorCode, errorMessage)
         .catch((error) => {
@@ -251,6 +296,5 @@ describe('ConsultaCNPJ API', () => {
         });
     });
   });
-
 
 });

@@ -6,33 +6,38 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script>
     $(document).ready(() => {
-      $.get('http://localhost:8888/captcha', data => {
-        $("#imgCaptcha").attr("src", "data:image/png;base64,"+data.captcha);
-        $("#sessionId").val(data.sessionId);
+      $.get('http://localhost:8888/captcha', (data) => {
+        $('#imgCaptcha').attr('src', `data:image/png;base64,${data.captcha}`);
+        $('#sessionId').val(data.sessionId);
       });
-      $("#consultaCnpj").submit(e => {
+      $('#consultaCnpj').submit((e) => {
         e.preventDefault();
 
-        const SESSION_ID = $("#sessionId").val();
-        const CNPJ = $("#cnpj").val();
-        const SOLVED_CAPTCHA = $("#solvedCaptcha").val();
+        const SESSION_ID = $('#sessionId').val();
+        const CNPJ = $('#cnpj').val();
+        const SOLVED_CAPTCHA = $('#solvedCaptcha').val();
 
         $.post('http://localhost:8888/basicInfos', {
           sessionId: SESSION_ID,
           cnpj: CNPJ,
           solvedCaptcha: SOLVED_CAPTCHA,
-        }).done(data => {
-          for(let info in data) {
-            $("#result").append(`<tr> <td> ${info} </td> <td> ${data[info]} </td> </tr>`);
-          }
+        }).done((data) => {
+          $.each(data, (k, v) => {
+            $('#result').append(`<tr> <td> ${k} </td> <td> ${v} </td> </tr>`);
+          });
 
           $.post('http://localhost:8888/advancedInfos', {
-            sessionId: SESSION_ID
-          }).done(d => {
-            for(let i in d) {
-              $("#result").append(`<tr> <td> ${i} </td> <td> ${d[i]} </td> </tr>`);
-            }
+            sessionId: SESSION_ID,
+          }).done((d) => {
+            $.each(d, (l, x) => {
+              $('#result').append(`<tr> <td> ${l} </td> <td> ${x} </td> </tr>`);
+            });
           });
+        }).fail((xhr, status, error) => {
+          const statusCode = xhr.status;
+          const errorCode = JSON.parse(xhr.responseText).error.code;
+          const errorMessage = JSON.parse(xhr.responseText).error.message;
+          $('#result').append(`<tr> <td> ${errorCode} </td> <td> ${errorMessage} </td> </tr>`);
         });
       });
     });
