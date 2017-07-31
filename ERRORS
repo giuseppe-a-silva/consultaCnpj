@@ -1,0 +1,13 @@
+{
+  1: {
+    message: 'Falha na requisição! Por favor, tente novamente!',
+    base: '#validateRequest(request)',
+    status: '#request.statusCode',
+  },
+  2: {
+    message: 'Erro interno!',
+    base: '#promiseHandler(data)',
+    status: 500,
+  },
+
+}
