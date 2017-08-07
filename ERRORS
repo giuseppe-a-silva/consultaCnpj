@@ -1,13 +1,20 @@
-{
-  1: {
-    message: 'Falha na requisição! Por favor, tente novamente!',
-    base: '#validateRequest(request)',
-    status: '#request.statusCode',
-  },
-  2: {
-    message: 'Erro interno!',
-    base: '#promiseHandler(data)',
-    status: 500,
-  },
-
-}
+[
+   {
+      "code": 1,
+      "message": "Falha na requisição! Por favor, tente novamente!",
+      "base": "#validateRequest(request)",
+      "status": "#request.statusCode"
+   },
+   {
+      "code": 2,
+      "message": "Erro interno!",
+      "base": "#promiseHandler(data)",
+      "status": 500
+   },
+   {
+      "code": 3,
+      "message": "Impossível gerar a imagem!",
+      "base": "#generateImageBase64(buffer)",
+      "status": 500
+   }
+]
