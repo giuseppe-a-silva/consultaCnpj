@@ -16,6 +16,7 @@
   "dependencies": {
     "cheerio": "^0.22.0",
     "iconv-lite": "^0.4.17",
+    "ramda": "^0.24.1",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4"
   },
