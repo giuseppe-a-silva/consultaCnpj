@@ -1,3 +1,5 @@
+# DESCONTINUADO
+
 # Consulta CNPJ
 
 Módulo para consulta do CNPJ na base da Receita Federal do Brasil.
